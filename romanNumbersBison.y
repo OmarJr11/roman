@@ -1,7 +1,9 @@
 %{
 	#include <stdio.h>
 	#include <string.h>
+	#include <stdlib.h>
 	int yylex();
+	void yy_scan_string(char *s);
 	int yyerror(char *s);
 	int convertNumberRoman(char *roman);
 	int numberRoman(char roman);
@@ -12,7 +14,7 @@
 %type <cad> ROMANS
 
 %union{
-	char cad[100];
+	char *cad; 
 }
 
 %%
@@ -33,7 +35,7 @@ INSTRUCTION:
 %%
 
 int yyerror(char *s){
-	printf(" ->ErrorSintactico %s\n", s);
+	printf("\n->Error Sintactico %s\n", s);
 }
 
 /*
@@ -44,6 +46,7 @@ int yyerror(char *s){
 */
 int convertNumberRoman(char *roman) {
 	int decimal = 0;
+	char *algo = yylval.cad;
 	//Se recorre la cadena caracter por caracter
 	for(int i = 0; i < strlen(roman); i++) {
 		/*
@@ -88,6 +91,10 @@ int numberRoman(char roman) {
 }
 
 int main(int argc, char **argv){
+	if(argc > 1) {
+		yylval.cad = argv[1];
+		yy_scan_string(yylval.cad);
+	}
 	yyparse();
 	return 0;
 }

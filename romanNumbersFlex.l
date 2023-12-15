@@ -5,11 +5,11 @@
 	void showError();
 %}
 
-romans 	^M{0,3}D?(CM|CD|D?C{0,3})L?(XC|XL|L?X{0,3})V?(IX|IV|V?I{0,3})$
+romans 	^M{0,3}D?(CM|CD|D?C{0,3})L?(XC|XL|L?X{0,3})V?(IX|IV|V?I{0,3})
 
 %%
 
-{romans} 		{sscanf(yytext, "%s", yylval.cad); return (ROMANS);}
+{romans} 		{yylval.cad; return (ROMANS);}
 
 .				{showError(); return(OTHER);}	
 [ \t\r]			{}
@@ -17,5 +17,5 @@ romans 	^M{0,3}D?(CM|CD|D?C{0,3})L?(XC|XL|L?X{0,3})V?(IX|IV|V?I{0,3})$
 %%
 
 void showError(char* other){
-	printf(" <<ErrorLexico \"%s\" >>", other);
+	printf("\n<<Error Lexico \"%s\" >>", other);
 }
