@@ -5,8 +5,7 @@
 	void showError();
 %}
 
-romans 	^M{0,3}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3})$
-
+romans 	^M{0,3}D?(CM|CD|D?C{0,3})L?(XC|XL|L?X{0,3})V?(IX|IV|V?I{0,3})$
 
 %%
 
