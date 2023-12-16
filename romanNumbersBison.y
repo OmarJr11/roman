@@ -1,8 +1,23 @@
+/* 
+
+Convertir un número romano en decimal usando Flex y Bison
+
+Instegrantes: 
+	Anderson Arciniegas 27481456
+	Omar Gonzalez 27244029
+
+./makefile.sh 		para crear los archivos ejecutables
+./roman XIVV 		para correr el programa 
+
+*/
+
 %{
 	#include <stdio.h>
 	#include <string.h>
+	#include <stdlib.h>
 	int yylex();
 	int yyerror(char *s);
+	void yy_scan_string(char *s);
 	int convertNumberRoman(char *roman);
 	int numberRoman(char roman);
 %}
@@ -12,25 +27,28 @@
 %type <cad> ROMANS
 
 %union{
-	char cad[100];
+	char *cad;
 }
+
+%start Prog
 
 %%
 
-prog:	
-	INSTRUCTIONS
+Prog:	
+	Instructions
 ;
 
-INSTRUCTIONS:
-			| INSTRUCTION INSTRUCTIONS
+Instructions:
+			| Instruction Instructions
 ;
 
-INSTRUCTION: 
-		   | ROMANS {printf("%d", convertNumberRoman($1));}
+Instruction: 
+		   | ROMANS {printf("%d\n", convertNumberRoman($1));}
 		   | OTHER
 
 ;
 %%
+
 
 int yyerror(char *s){
 	printf(" ->ErrorSintactico %s\n", s);
@@ -39,7 +57,8 @@ int yyerror(char *s){
 /*
 	Recibe un numero romano como una cadena y 
 	lo convierte en un numero en notacion decimal
-  	roman {char} A la cadena en numero romano
+
+  	roman {char} la cadena en numero romano
   	return {int} 
 */
 int convertNumberRoman(char *roman) {
@@ -67,13 +86,15 @@ int convertNumberRoman(char *roman) {
 /*
 	Recibe un numero romano como un caracter y 
 	devuelve su equivalente en notacion decimal
+
   	roman {char} Caracter en numero romano
   	return {int} 
 */
 int numberRoman(char roman) {
 	char caracter = roman;
 	int number = 0;
-	//Se comprueva que el caracter pertenezca a los Numero romanos
+
+	//Se comprueba que el caracter pertenezca a los Numero romanos
 	switch(caracter) {
 		case 'I': number = 1; break;
 		case 'V': number = 5; break;
@@ -88,6 +109,7 @@ int numberRoman(char roman) {
 }
 
 int main(int argc, char **argv){
+	yy_scan_string(argv[1]);
 	yyparse();
 	return 0;
 }
